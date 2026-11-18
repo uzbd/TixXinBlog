@@ -1,0 +1,32 @@
+# TixXinBlog API for Render Free
+# Build context must be the repository root.
+# Intentionally keeps build dependencies because the app runs its TypeScript
+# migration script (tsx) before starting NestJS on each container start.
+
+FROM node:26-alpine
+
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+
+RUN npm install --global --force corepack@0.34.6 && corepack enable
+
+WORKDIR /repo
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY patches ./patches
+COPY src/backend/server-main/package.json src/backend/server-main/
+COPY src/shared/subscription-domain src/shared/subscription-domain/
+
+RUN corepack pnpm install --frozen-lockfile --filter server-main --ignore-scripts
+
+COPY src/backend/server-main src/backend/server-main
+
+RUN corepack pnpm --filter server-main build
+
+WORKDIR /repo/src/backend/server-main
+
+ENV NODE_ENV=production \
+    MEDIA_DIRECTORY=/tmp/tixxin-media
+
+EXPOSE 10000
+
+CMD ["sh", "-c", "corepack pnpm migration:up && exec node dist/main.js"]
