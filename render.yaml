@@ -46,6 +46,8 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: "3000"
       - key: LOG_LEVEL
         value: info
       - key: MEDIA_DIRECTORY
