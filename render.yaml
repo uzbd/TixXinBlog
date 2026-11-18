@@ -42,7 +42,6 @@ services:
     branch: main
     dockerfilePath: ./deploy/render/Dockerfile.api
     dockerContext: .
-    dockerCommand: sh -c 'corepack pnpm migration:up && exec node dist/main.js'
     healthCheckPath: /ready
     envVars:
       - key: NODE_ENV
