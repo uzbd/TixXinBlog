@@ -1,6 +1,5 @@
-# TixXinBlog 0.5.3 — Render Free Blueprint
-# Add this file at the repository root as: render.yaml
 
+# TixXinBlog 0.5.3 — Render Free Blueprint
 services:
   - type: web
     name: tixxinblog-web
@@ -11,7 +10,6 @@ services:
     dockerfilePath: ./src/frontend/web-blog/Dockerfile
     dockerContext: .
     healthCheckPath: /
-    maxShutdownDelaySeconds: 30
     envVars:
       - key: NODE_ENV
         value: production
@@ -46,7 +44,6 @@ services:
     dockerContext: .
     dockerCommand: sh -c 'corepack pnpm migration:up && exec node dist/main.js'
     healthCheckPath: /ready
-    maxShutdownDelaySeconds: 30
     envVars:
       - key: NODE_ENV
         value: production
@@ -72,8 +69,8 @@ services:
 
 databases:
   - name: tixxinblog-db
-    databaseName: tixxin_blog
-    user: tixxin
+    databaseName: tixxinblog
+    user: tixxinblog
     plan: free
     region: singapore
-    postgresMajorVersion: "16"
+    
